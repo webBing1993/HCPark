@@ -65,7 +65,7 @@ class Wechat extends Controller
         $type = $weObj->getRev()->getRevEvent();
         //$weObj->news($new1)->reply();
         //$weObj->getRevFrom();
-        //Log::record('log:'.json_encode($weObj->getRev()->getRevEvent()));
+        Log::record('log:'.json_encode($weObj->getRev()->getRevEvent()));
         //进入应用中时
         if ($type['event'] == TPWechat::EVENT_ENTER_AGENT) {
             //$data:{"ToUserName":"ww68db00a56b949cff","FromUserName":"15706844655","CreateTime":"1516348065","MsgType":"event","AgentID":"1000023","Event":"enter_agent","EventKey":{}}
