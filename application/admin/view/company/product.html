@@ -129,8 +129,8 @@
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label">详情</label>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-10 present " name="present" id="summernote"></div>
+                    <div class="form-group col-sm-10 ">
+                        <script id="summernote" name="present" type="text/plain"></script>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label"></label>
                         <div class="col-sm-12"><input type="button"  class="form-control"   value="提交" onclick="update()"></div>
@@ -173,7 +173,9 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-10 present" id="summernote1" name="present1"></div>
+                        <!--<div class="col-sm-10 present" id="summernote1" name="present1"></div>-->
+                        <script id="summernote1" name="present1" type="text/plain"></script>
+
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label"></label>
                         <div class="col-sm-12"><input type="button"  class="form-control"   value="提交" onclick="addProduct()"></div>
@@ -189,13 +191,15 @@
 
 {block name="script"}
 <script src="/admin/js/plugins/iCheck/icheck.min.js"></script>
-<script src="/static/summernote/summernote.min.js"></script>
-<script src="/static/summernote/lang/summernote-zh-CN.js"></script>
+<!--<script src="/static/summernote/summernote.min.js"></script>
+<script src="/static/summernote/lang/summernote-zh-CN.js"></script>-->
 <script src="/admin/js/plugins/iCheck/icheck.min.js"></script>
 <script src="/static/bootstrap-fileinput/js/fileinput.min.js"></script>
 <script src="/static/bootstrap-fileinput/themes/fa/fa.js"></script>
 <script src="/static/bootstrap-fileinput/js/locales/zh.js"></script>
 <script src="/static/js/jQuery-imgBox/jquery.imgbox.js"></script>
+<script src="/static/ueditor/ueditor.config.js"></script>
+<script src="/static/ueditor/ueditor.all.min.js"></script>
 <script>
     console.log("{$type}");
     $(document).ready(function(){
@@ -228,27 +232,15 @@
             });
         }
 
-        $('#summernote').summernote({
-            lang: 'zh-CN',
-            height: 300,
-            minHeight: 210,
-            callbacks: {
-                onImageUpload: function (files) { //the onImageUpload API
-                    img = sendFile(files[0]);
-                }
-            }
-        });
-        $('#summernote1').summernote({
-            lang: 'zh-CN',
-            height: 300,
-            minHeight: 210,
-            callbacks: {
-                onImageUpload: function (files) { //the onImageUpload API
-                    img = sendFile(files[0]);
-                }
-            }
-        });
 
+
+
+    });
+    var ue1 = UE.getEditor('summernote1',{
+        initialFrameHeight:400
+    });
+    var ue = UE.getEditor('summernote',{
+        initialFrameHeight:400
     });
     $(".input-file").fileinput({
         showPreview: false,
@@ -284,6 +276,7 @@
     });
     /*获取企业产品或服务详细信息*/
     function getCompanyserver(id){
+        ue.setContent("");
         $.ajax({
             data: {id:id},
             type: "POST",
@@ -292,7 +285,7 @@
                  console.log(data);
                 $("[name='name']").val(data.name);
                 $("[name='detail']").val(data.detail);
-                $('.present').summernote('code',data.content,);
+                ue.setContent(data.content);
                 $("[name='id']").val(data.id);
                 $(".front_cover_img").attr("src",data.front_cover);
                 $("input[name='front_cover']").val(data.front_cover);
@@ -307,7 +300,7 @@
         var details=$("input[name='detail']").val();
         var image=$("input[name='front_cover']").val();
         var types="{$type}";
-        var presents = $('.present').summernote('code');
+        var presents = ue.getContent();
         $.ajax({
             data: {id:ids,name:names,content:presents,detail:details,type:types,front_cover:image},
             type: "POST",
@@ -329,7 +322,7 @@
     /*添加企业产品或服务*/
     function addProduct(){
         var names=$("[name='name1']").val();
-        var contents=$('.present').eq(1).summernote('code');
+        var contents=ue1.getContent();
         var companyid ="{$companyId}";
         var details =$("[name='detail1']").val();
         var image=$("input[name='front_cover']").val();
