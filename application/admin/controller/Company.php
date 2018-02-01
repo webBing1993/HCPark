@@ -231,10 +231,10 @@ class Company extends Admin
                 if ($value[0]){
                     $alert_data .= $value[0]."\n";
                 }
-                if (strlen($alert_data) == 0){
-                    $alert_data = "无";
-                }
             }
+        }
+        if (!strlen($alert_data)){
+            $alert_data = "无";
         }
 
         return $this->success('导入成功','',$alert_data);
