@@ -53,6 +53,10 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="mail-box-header">
+            <div class=" pull-right tooltip-demo">
+                <a href="javascript:ggg()" class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top"><i
+                        class="fa fa-times"></i> 关闭</a>
+            </div>
           {eq name="$type" value="1"}
             <h2>企业产品</h2>
           {else/}
@@ -343,6 +347,10 @@
             }
         });
     }
+
     highlight_subnav("{:Url('Company/index')}");
+    function ggg() {
+        window.history.go(-1);
+    }
 </script>
     {/block}
