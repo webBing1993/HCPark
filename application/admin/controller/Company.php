@@ -231,6 +231,9 @@ class Company extends Admin
                 if ($value[0]){
                     $alert_data .= $value[0]."\n";
                 }
+                if (strlen($alert_data) == 0){
+                    $alert_data = "无";
+                }
             }
         }
 
