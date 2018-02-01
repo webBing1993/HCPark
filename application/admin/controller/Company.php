@@ -228,7 +228,9 @@ class Company extends Admin
                 ];
                 $park_company_model->where(['id' => $result])->update($update_data);
             }else{
-                $alert_data .= $value[0]."\n";
+                if ($value[0]){
+                    $alert_data .= $value[0]."\n";
+                }
             }
         }
 
