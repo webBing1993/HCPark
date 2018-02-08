@@ -214,38 +214,42 @@
         $(".check-all").on("ifChanged",function(){
             $("tbody").find(".ids").iCheck("toggle");
         });
-        function sendFile(file,uid) {
-            var data = new FormData();
-            data.append("file_data", file);
-            console.log(file.size/1024);
-            if(file.size/1024>500){
-                updateAlert('图片大小不能大于500kb哦~','info');
-                return
+        UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+        UE.Editor.prototype.getActionUrl = function(action) {
+            if (action == 'uploadimage') {
+                return '/admin/Upload/ueditorFile';
+            } else {
+                return this._bkGetActionUrl.call(this, action);
             }
-            $.ajax({
-                data: data,
-                type: "POST",
-                url: "{:Url('Upload/picture')}",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    var data = $.parseJSON(response);
-                        $("#summernote").summernote('insertImage', data.data, 'image name'); // the insertImage API
-                }
-            });
         }
-
-
-
-
     });
+
     var ue1 = UE.getEditor('summernote1',{
-        initialFrameHeight:400
+        initialFrameHeight:400,
+        catchRemoteImageEnable:false,
     });
+
     var ue = UE.getEditor('summernote',{
-        initialFrameHeight:400
+        initialFrameHeight:400,
+        catchRemoteImageEnable:false,
     });
+    function sendFile(file) {
+        var data = new FormData();
+        data.append("file_data", file);
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "{:Url('Upload/picture')}",
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                var data = $.parseJSON(response);
+                editor.execCommand('insertimage', data.data, 'image name');
+                //$(".summernote").summernote('insertImage', data.data, 'image name'); // the insertImage API
+            }
+        });
+    }
     $(".input-file").fileinput({
         showPreview: false,
         language: 'zh', //设置语言

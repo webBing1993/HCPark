@@ -89,4 +89,32 @@ class Upload
         $return  = array('code' => 1, 'message' => '上传成功', 'data' => '');
         return json_encode($return);
     }
+
+    /**ueditor 上传图片
+     * @return string
+     */
+    public function ueditorFile(){
+        $file = request()->file('upfile');
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        $info = $file->move(ROOT_PATH . 'public/uploads/file');
+        if($info){
+            $path = '/uploads/file/'.$info->getSaveName();
+            $data = [
+                'state' => "SUCCESS",
+                'url' => $path,
+                'title' => $info->getSaveName(),
+                'original' => $info->getFilename(),
+                'type' => "",
+                'size' => $info->getSize()
+            ];
+            return json_encode($data);
+        } else {
+            // 上传失败获取错误信息
+            $data = [
+                'code' => 0,
+                'msg' => $file->getError()
+            ];
+            return json_encode($data);
+        }
+    }
 }
